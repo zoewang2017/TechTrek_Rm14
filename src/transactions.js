@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -13,8 +14,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import FolderIcon from "@material-ui/icons/Folder";
-import DeleteIcon from "@material-ui/icons/Delete";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import "./transactions.css";
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +50,30 @@ export default function Transactions() {
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
 
+  const [number, setNumber] = useState(1);
+  const [movie, setMovie] = useState("");
+
+  useEffect(() => {
+    async function getData() {
+      const response = await axios({
+        method: "POST",
+        url:
+          "https://u8fpqfk2d4.execute-api.ap-southeast-1.amazonaws.com/techtrek2020/transaction/view",
+        headers: {
+          "x-api-key": "Ps1TGitUkS8fV6jlp3ASuab0y4CS6mr59ngEoAU6",
+          "Content-Type": "text/plain",
+        },
+        body: '{"custID":"14"}',
+      });
+
+      console.log(response.data);
+
+      //   setMovie(response.data);
+    }
+
+    getData();
+  });
+
   return (
     <div className="transactions">
       <div className={classes.root}>
@@ -82,7 +107,7 @@ export default function Transactions() {
 
           <Grid item xs={12} md={6}>
             <Typography variant="h6" className={classes.title}>
-              Avatar with text and icon
+              Transactions
             </Typography>
             <div className={classes.demo}>
               <List dense={dense}>
@@ -90,16 +115,16 @@ export default function Transactions() {
                   <ListItem>
                     <ListItemAvatar>
                       <Avatar>
-                        <FolderIcon />
+                        <MonetizationOnIcon />
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                      primary="Single-line item"
-                      secondary={secondary ? "Secondary text" : null}
+                      primary="Transaction"
+                      secondary={secondary ? "amount" : null}
                     />
                     <ListItemSecondaryAction>
                       <IconButton edge="end" aria-label="delete">
-                        <DeleteIcon />
+                        <ArrowForwardIcon />
                       </IconButton>
                     </ListItemSecondaryAction>
                   </ListItem>
